@@ -1,5 +1,6 @@
 site_name: WeBuild Proposal Account Recovery
-site_url: https://sitename.example
+site_url: https://altmannpeter.github.io/webuild-account-recovery/
+repo_url: https://github.com/AltmannPeter/webuild-account-recovery
 theme:
   name: material
   palette:
