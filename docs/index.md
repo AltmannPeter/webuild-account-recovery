@@ -4,7 +4,7 @@
 
 Pseudonyms are a mandatory feature of the EUDI Wallet. However, the current legal text restricts pseudonym generation to WebAuthn-based mechanisms. Such pseudonyms cannot support identity-bound pseudonyms, which are important in use cases like account recovery with known offender matching.
 
-The work presented in these pages analyzes the regulatory landscape and technical constraints around pseudonym management for account recovery with known offender matching. The analysis in "Analysis and Alternatives" highlights ambiguities and limitations in the mandated WebAuthn approach and evaluates three candidate designs:
+The work presented in these pages analyzes the regulatory landscape and technical constraints around pseudonym management for account recovery with known offender matching. The analysis in [Analysis and Alternatives](analysis-alternatives.md) highlights ambiguities and limitations in the mandated WebAuthn approach and evaluates three candidate designs:
 
 1. **Alias-based pseudonyms**: Simple, user-controlled, and minimizes existing ecosystem disruption. However, they are limited by a finite set of pre-issued pseudonyms and less suitable for high-privacy use cases where site-specificity is required.
 2. **Directed pseudonyms**: Offer site-specificity by default, but require a new pseudonym service and support for combined presentations.
@@ -15,7 +15,7 @@ All three solution candidates support identity-bound pseudonyms by relying on a 
 
 ## Proposal
 
-Informed by this analysis, "Architecture Decision Record" commits to investigating and prototyping a ZKP-based pseudonym solution within WeBuild. This approach:
+Informed by this analysis, [Architecture Decision Record](adr-pseudonyms.md) commits to investigating and prototyping a ZKP-based pseudonym solution within WeBuild. This approach:
 
 - Enables stable, site-specific pseudonyms without introducing new ecosystem actors
 - Supports critical use cases like ban enforcement that WebAuthn cannot address
@@ -23,4 +23,4 @@ Informed by this analysis, "Architecture Decision Record" commits to investigati
 
 There are technical and regulatory challenges involved. Empirical evaluation and iterative prototyping in WeBuild can provide insights into real-world tradeoffs, demonstrate feasibility, and provide evidence-based guidance for future regulatory frameworks.
 
-The aim of this work is to develop a conformance specification for WeBuild.
+The aim of this work is to develop a [Conformance Specification](cs-NN-pseudonyms.md) for WeBuild.
