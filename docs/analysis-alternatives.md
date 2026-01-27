@@ -26,7 +26,7 @@ WebAuthn related concerns are explored next.
 
 ## WebAuthn
 
-A second concern is the mandated use of WebAuthn. A detailed critique of its unsuitability for pseudonym use is available [here](https://github.com/eu-digital-identity-wallet/eudi-doc-architecture-and-reference-framework/discussions/375#discussioncomment-13638807). The core problem is that WebAuthn is an authentication protocol and not a pseudonym solution. Binding pseudonyms to the authentication mechanism adds unnecessary complexity and is hard to reconcile with emerging ZKP based solutions.
+A second concern is the mandated use of WebAuthn. A detailed critique of its unsuitability for pseudonym use is available [on the ARF github](https://github.com/eu-digital-identity-wallet/eudi-doc-architecture-and-reference-framework/discussions/375#discussioncomment-13638807). The core problem is that WebAuthn is an authentication protocol and not a pseudonym solution. Binding pseudonyms to the authentication mechanism adds unnecessary complexity and is hard to reconcile with emerging ZKP based solutions.
 
 Despite this, WebAuthn is referenced in the implementing acts as the mechanism for enabling pseudonym functionality. However, technical details are undefined, and no coherent mapping exists between WebAuthn semantics and pseudonym requirements.
 
@@ -50,6 +50,7 @@ In the alias-based model, pseudonyms are not site-specific by default. Instead, 
 Pseudonyms are computed as `F(key=nym_seed,data=index)`. With an issuer managed `nym_seed`, the issuer can precompute a bounded array of such values. During presentation, the user selects an alias, and the wallet discloses the corresponding pseudonym.
 
 Properties:
+
 * Requires no new ecosystem actors or protocol changes.
 * May support ban evasion resistance (will likely require fixing an index and forcing pseudonym reuse).
 * Pseudonym reuse is user-controlled.
@@ -83,6 +84,7 @@ The directed approach enables robust pseudonym guarantees but requires additiona
 ### ZKP-based Pseudonyms
 
 ZKP-based models offer flexible support for pseudonym semantics. Both circuit-based and commitment-based constructions are possible, enabling:
+
 * Site-specificity
 * Ban evasion resistance
 * Optional re-identification

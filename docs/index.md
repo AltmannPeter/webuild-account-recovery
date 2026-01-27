@@ -1,10 +1,22 @@
 # Pseudonyms for the EUDI Wallet
 
-## Background 
+## Background
 
-Pseudonyms are a mandatory feature of the EUDI Wallet. However, the current legal text restricts pseudonym generation to WebAuthn-based mechanisms. Such pseudonyms cannot support identity-bound pseudonyms, which are important in use cases like account recovery with known offender matching.
+Pseudonyms are a mandatory feature of the EUDI Wallet. However, the current legal text restricts pseudonym generation to WebAuthn-based mechanisms. Such pseudonyms cannot support identity-bound pseudonyms, which may be important in use cases like account recovery or account creation.
 
-The work presented in these pages analyzes the regulatory landscape and technical constraints around pseudonym management for account recovery with known offender matching. The analysis in [Analysis and Alternatives](analysis-alternatives.md) highlights ambiguities and limitations in the mandated WebAuthn approach and evaluates three candidate designs:
+??? info "Noteworthy source in the legal text and additional reading"
+
+    Articles 5 and 5b(9) of [Regulation (EU) 2024/1183](https://eur-lex.europa.eu/eli/reg/2024/1183/oj) state that the use of pseudonyms cannot be prohibited unless identification is required by Union or national law. Pseudonym management is a mandatory EUDIW function under Article 5a(4)(b). In addition, [CIR 2024/2979 Article 14](https://eur-lex.europa.eu/eli/reg_impl/2024/2979/oj/eng#art_14) mandates WebAuthn as the pseudonymization solution.
+
+    However, growing recognition that WebAuthn does not cover all pseudonym use cases has prompted calls for alternative approaches.
+
+The work presented in these pages analyzes the regulatory landscape and technical constraints around pseudonym management for account recovery with support for known offender matching.
+
+??? info "Known offender matching"
+
+    Known offender matching is a method used to secure account creation by preventing ban evasion. When a user is banned for misconduct, the service aims to block re-registration under a new identity or pseudonym. The process of checking whether a registering user has previously been banned is referred to as known offender matching.
+
+The analysis in [Analysis and Alternatives](analysis-alternatives.md) highlights ambiguities and limitations in the mandated WebAuthn approach and evaluates three candidate designs:
 
 1. **Alias-based pseudonyms**: Simple, user-controlled, and minimizes existing ecosystem disruption. However, they are limited by a finite set of pre-issued pseudonyms and less suitable for high-privacy use cases where site-specificity is required.
 2. **Directed pseudonyms**: Offer site-specificity by default, but require a new pseudonym service and support for combined presentations.
