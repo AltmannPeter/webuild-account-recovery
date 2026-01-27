@@ -1,4 +1,4 @@
-site_name: WeBuild Proposal Account Recovery
+site_name: WeBuild Proposal Pseudonyms
 site_url: https://altmannpeter.github.io/webuild-account-recovery/
 repo_url: https://github.com/AltmannPeter/webuild-account-recovery
 theme:
@@ -28,3 +28,7 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences
+
+plugins:
+   - search
+   - awesome-nav

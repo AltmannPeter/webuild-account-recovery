@@ -1,4 +1,4 @@
-# Pseudonyms for the EUDI Wallet
+# Analysis and Alternatives
 
 ## Background
 
