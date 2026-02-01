@@ -89,6 +89,28 @@ This specification uses the following roles and components:
 
 ## 6. Protocol Overview
 
+A ZKP-based pseudonym system operates in three main phases, involving the Pseudonym Manager (Issuer), the Wallet Unit (WU), and the Verifier:
+
+**The Pseudonym Manager**:
+
+1. Generates a unique, high-entropy seed, `pns` for the user
+2. Embeds a cryptographic binding to `pns` in an attribute attestation
+3. Issues the attestation
+
+??? danger "Disclosure of the pseudonym seed"
+
+    It is critical for user privacy that the pseudonym seed is never revealed. The binding in step 2 mitigates accidental disclosure (e.g., if the full attestation is exposed). By including a commitment to the seed rather than embedding the `pns` value directly, the Wallet Unit cannot disclose the seed as the binding is opened within the ZKP circuit during proof generation. This design shifts responsibility to the ZKP layer, which must prove properties over the committed seed without revealing it. It also requires the user's wallet to store the pseudonym seed (out of scope for this text).
+
+**The Wallet Unit**:
+
+- The user visits a site or service to access with a pseudonym
+- The Wallet Unit derives a pseudonym specific to the site or service using: `nym = PRF(key=seed, data=scope||index)`
+- The Wallet Unit generates a ZKP proving correct derivation
+
+???+ info "ZKP disclosure of pseudonym"
+
+    During presentation, the user would provide a ZKP for a statement such as: "I possess a valid issuer-signed attestation containing a hash binding `H` to a pseudonym seed. I know the preimage `pns` of `H`, and the presented pseudonym `nym` is derived by hashing `pns` concatenated with a scope `scp` and index `idx`.” 
+
 ## Pseudonym Generation [WIP]
 
 EVERYTHING BELOW IS WIP
