@@ -9,7 +9,12 @@ Table of Content:
 - [Normative Language](#3-normative-language)
 - [Security Properties and Requirements](#4-security-properties-and-requirements)
 - [Roles and Components](#5-roles-and-components)
-- [The Pseudonym Seed](#the-pseudonym-seed)
+- [Protocol Overview](#6-protocol-overview)
+- [High-level Flows](#7-high-level-flows)
+- [Normative Requirements](#8-normative-requirements)
+- [Interfaces](#9-interfaces)
+- [Security Considerations](#10-security-considerations)
+- [Conformance](#11-conformance)
 
 ## 1. Introduction
 
@@ -58,7 +63,7 @@ This specification ensures the following security properties and requirements:
 - **Secrecy**: The pseudonym seed value SHALL NOT be disclosable. Attestations SHALL store cryptographic commitments to the seed rather than cleartext values.
 - **Transferability**: The pseudonym seed SHALL be recoverable when the previous wallet instance or attestation becomes unavailable.
 
-## 5. Roles and Components
+## 5. Roles, and Components
 
 This specification uses the following roles and components:
 
@@ -66,19 +71,19 @@ This specification uses the following roles and components:
 
 - User (holder, prover): The identity subject who controls the Wallet Unit and the attestation from which pseudonyms are derived.
 - Wallet Unit (WU): The EUDIW application that:
-  - Requests, retrieves, and stores attestations containing pseudonym seed commitments
-  – Generates ZKPs of pseudonym derivation
-  – Presents derived pseudonyms to verifiers
-  – Holds hardware-protected keys for proof-of-possession binding
+    - Requests, retrieves, and stores attestations containing pseudonym seed commitments
+    – Generates ZKPs of pseudonym derivation
+    – Presents derived pseudonyms to verifiers
+    – Holds hardware-protected keys for proof-of-possession binding
 - **Pseudonym Manager (Issuer)**: The entity that:
-  - Generates distinct high-entropy pseudonym seeds for each identity subject
-  - Issues attestations containing cryptographic commitments to those seeds
-  - Retains capability to unmask pseudonyms when legally required
+    - Generates distinct high-entropy pseudonym seeds for each identity subject
+    - Issues attestations containing cryptographic commitments to those seeds
+    - Retains capability to unmask pseudonyms when legally required
 - **Verifier (Relying Party, Service Provider)**: An entity that:
-  - Receives pseudonym presentations with associated ZKP proofs
-  - Verifies pseudonym validity and rate-limiting properties
-  - Enforces service-specific policies (e.g., known offender matching during account creation)
-  - Provides services (e.g., account recovery) based on verified pseudonyms
+    - Receives pseudonym presentations with associated ZKP proofs
+    - Verifies pseudonym validity and rate-limiting properties
+    - Enforces service-specific policies (e.g., known offender matching during account creation)
+    - Provides services (e.g., account recovery) based on verified pseudonyms
 
 **Components**:
 
@@ -91,42 +96,15 @@ This specification uses the following roles and components:
 
 A ZKP-based pseudonym system operates in three main phases, involving the Pseudonym Manager (Issuer), the Wallet Unit (WU), and the Verifier:
 
-**The Pseudonym Manager**:
+**Seed issuance**:
 
-1. Generates a unique, high-entropy seed, `pns` for the user
-2. Embeds a cryptographic binding to `pns` in an attribute attestation
-3. Issues the attestation
+1. The Pseudonym Manager generates a unique, high-entropy seed, `pns` for the user
+2. The Pseudonym Manager creates a cryptographic binding to `pns`
+3. The issuer embeds the binding in an attribute attestations, signs, and issues it
 
 ??? danger "Disclosure of the pseudonym seed"
 
     It is critical for user privacy that the pseudonym seed is never revealed. The binding in step 2 mitigates accidental disclosure (e.g., if the full attestation is exposed). By including a commitment to the seed rather than embedding the `pns` value directly, the Wallet Unit cannot disclose the seed as the binding is opened within the ZKP circuit during proof generation. This design shifts responsibility to the ZKP layer, which must prove properties over the committed seed without revealing it. It also requires the user's wallet to store the pseudonym seed (out of scope for this text).
-
-**The Wallet Unit**:
-
-- The user visits a site or service to access with a pseudonym
-- The Wallet Unit derives a pseudonym specific to the site or service using: `nym = PRF(key=seed, data=scope||index)`
-- The Wallet Unit generates a ZKP proving correct derivation
-
-???+ info "ZKP disclosure of pseudonym"
-
-    During presentation, the user would provide a ZKP for a statement such as: "I possess a valid issuer-signed attestation containing a hash binding `H` to a pseudonym seed. I know the preimage `pns` of `H`, and the presented pseudonym `nym` is derived by hashing `pns` concatenated with a scope `scp` and index `idx`.” 
-
-## Pseudonym Generation [WIP]
-
-EVERYTHING BELOW IS WIP
-
-### Fields
-
-In the attribute attestation:
-
-- `pns`: A cryptographic commitment to the pseudonym seed, a high entropy and unique value specific to each user.
-
-In the pseudonym presentation:
-
-- `scp`: The scope that details the verifier identifier or the service identifier.
-- `idx`: The index value used for rate-limiting pseudonyms.
-
-### The Pseudonym Seed
 
 ??? info "The suggested SE approach"
 
@@ -134,14 +112,92 @@ In the pseudonym presentation:
 
     Alternatives include having the issuer provide a pseudonym seed, and safe-keeping it.
 
-### Pseudonym Derivation
+**Pseudonym generation**:
 
-When presenting a pseudonym, the pseudonym seed is used as a key for a PRF applied to a scope and index to create a directed pseudonym: `nym = PRF(key=pns, data=scp|index)`.
+- The user visits a site or service to access with a pseudonym
+- The Wallet Unit derives a pseudonym specific to the site or service using the pseudonym seed (`pns`) a scope (`scp`) and index (`idx`): `nym = PRF(key=pns, data=scp||idx)`
+- The Wallet Unit generates a ZKP proving correct derivation
 
-## Test Procedure
+??? info "ZKP disclosure of pseudonym"
 
-### Pseudonym Seed Derivation
+    During presentation, the user would provide a ZKP for a statement such as: "I possess a valid issuer-signed attestation containing a hash binding `H` to a pseudonym seed. I know the preimage `pns` of `H`, and the presented pseudonym `nym` is derived by hashing `pns` concatenated with a scope `scp` and index `idx`.” 
 
-- Personal id number: `"19080101-1234"`
-- Secret key: `"ABC123"`
-- pns: `""`
+**Pseudonym presentation**:
+
+TEXT NEEDED ON HOW TO USE OID4VP TO PRESENT A ZKP PSEUDONYM. NO DETAILS HERE AS THESE WILL BE ADDED IN FLOW DESCRIPTION LATER.
+
+**Pseudonym verification**:
+
+The verifier:
+
+- Checks that the presented pseudonym is derived from a valid issuer signed attestation
+- Verifies that the correct scope (`scp`) was used
+- Verifies rate-limiting with the index (`idx`) value
+- Runs the verification circuit to validate the proof and public inputs
+- Accepts or rejects service provisioning based on policy (e.g., known offender list)
+
+## 7. High-level Flows
+
+### 7.1. Pseudonym Seed Generation and Issuance Flow
+
+Actors:
+
+Preconditions:
+
+Flow:
+
+### 7.2. Pseudonym Generation and Presentation Flow
+
+Actors:
+
+Preconditions:
+
+Flow:
+
+### 7.3. Pseudonym Verification Flow
+
+Actors:
+
+Preconditions:
+
+Flow:
+
+### 7.4. Known Offender Matching Flow
+
+Actors:
+
+Preconditions:
+
+Flow:
+
+### 7.5. Account Recovery Flow
+
+Actors:
+
+Preconditions:
+
+Flow:
+
+## 8. Normative Requirements
+
+### 8.1 Pseudonym Manager (Issuer) Requirements
+
+### 8.2 Wallet Unit Requirements
+
+### 8.3 Verifier (Relying Party) Requirements
+
+### 8.4 Cryptographic Requirements
+
+## 9. Interfaces
+
+### 9.1 Pseudonym Seed Commitment Format
+
+### 9.2 ZKP Proof Format
+
+### 9.3 Pseudonym Presentation Format
+
+## 10. Security Considerations
+
+## 11. Conformance
+
+### 11.1 Test Vectors

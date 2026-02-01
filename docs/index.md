@@ -4,7 +4,7 @@
 
 Pseudonyms are a mandatory feature of the EUDI Wallet. However, current legal text restricts pseudonym generation to WebAuthn-based mechanisms, which do not support identity-bound pseudonyms. This limitation poses challenges for use cases like account recovery, fraud prevention, and secure account creation that requires proof of humanhood.
 
-???+ note "Account recovery"
+??? note "Account recovery"
 
     Account recovery is the process of regaining access to a user account when the primary login mechanism is no longer available. Identity-bound pseudonyms offer significant benefits in this context: they give users a robust tool for initiating recovery and provide service providers with a secure, verifiable basis for managing the process.
 
@@ -16,7 +16,7 @@ Pseudonyms are a mandatory feature of the EUDI Wallet. However, current legal te
 
 To address these gaps, an earlier analysis ([Analysis and Alternatives](analysis-alternatives.md)) reviewed both the regulatory landscape and design space for enabling identity-bound pseudonyms that support account recovery and known offender matching.
 
-???+ note "Known offender matching"
+??? note "Known offender matching"
 
     Known offender matching is a method used to secure account creation by preventing ban evasion. When a user is banned for misconduct, the service aims to block re-registration under a new identity or pseudonym. The process of checking whether a registering user has previously been banned is referred to as known offender matching.
 
