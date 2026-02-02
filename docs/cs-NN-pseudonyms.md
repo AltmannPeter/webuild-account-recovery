@@ -146,6 +146,10 @@ Preconditions:
 
 Flow:
 
+1. **Seed Generation**: The Pseudonym Manager generates a cryptographically random pseudonym seed specific to the user. While seed generation is out of scope for this specification, it must ensure high entropy and uniqueness per user. A recommended approach is using HMAC-SHA256: `pns = HMAC(key=manager_secret, msg=DST|user_identifier)` where `DST` is the domain separation tag `"pns-v1"`, and `user_identifier` is a stable number assigned by the Pseudonym Manager.
+
+2. **Commitment Creation**: The Pseudonym Manager computes a cryptographic commitment: `commitment = Commit(pns, random)`. The commitment scheme should be ...
+
 ### 7.2. Pseudonym Generation and Presentation Flow
 
 Actors:
