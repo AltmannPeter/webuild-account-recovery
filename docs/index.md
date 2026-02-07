@@ -26,32 +26,24 @@ It remains unclear which pseudonym use cases will be supported in the ARF or the
 
 Crucially, a pseudonym is not a single identifier type but a set of identifier types, each configured to meet specific use case needs. As such, pseudonyms must be understood contextually and are meaningful only when configured to align with their intended use case. A practical approach is to begin with use case requirements and then define a corresponding pseudonym configuration.
 
-## Pseudonomous Account Management
+## Toward Identity-bound Pseudonyms
 
-An earlier analysis ([Analysis and Alternatives](analysis-alternatives.md)) reviewed both the regulatory landscape and design space for enabling identity-bound pseudonyms that support account recovery and known offender matching.
+Pseudonyms are often designed to meet specific operational requirements. In account management, two principal concerns are account recovery and known-offender matching.
 
-??? note "Account recovery"
+**Account recovery** involves regaining access when the user no longer controls any primary login mechanism. This requires a stable, device-independent pseudonym. Identity-bound pseudonyms meet this need by allowing users to initiate recovery and giving service providers a secure and verifiable anchor for the process.
 
-    Account recovery is the process of regaining access to a user account when the primary login mechanism is no longer available. Identity-bound pseudonyms offer significant benefits in this context: they give users a robust tool for initiating recovery and provide service providers with a secure, verifiable basis for managing the process.
+**Known-offender matching** secures account creation by preventing ban evasion. When a user is banned for misconduct, the system must detect and block re-registration under a new identity or pseudonym.
 
-??? note "Known offender matching"
+It remains unclear how a WebAuthn-based pseudonym could support either account recovery or known-offender matching. A solution that meets these requirements likely needs to be identity-bound. This proposal introduces a design based on a *pseudonym seed* issued by a pseudonym manager (e.g., a PID Provider). A commitment to the seed is embedded in an attestation and serves as input to a derivation function that generates the user's pseudonym. To preserve anonymity and avoid reliance on external services, the user generates a zero-knowledge proof (ZKP) of the pseudonym derivation locally on their device.
 
-    Known offender matching is a method used to secure account creation by preventing ban evasion. When a user is banned for misconduct, the service aims to block re-registration under a new identity or pseudonym. The process of checking whether a registering user has previously been banned is referred to as known offender matching.
+??? note "Pseudonym derivation"
 
-The analysis identified key limitations in the mandated WebAuthn approach and evaluated three alternative designs. All three solutions share a common foundation: they rely on a pseudonym seed issued by a pseudonym manager (e.g., the PID Provider). This seed is embedded in an attestation and serves two purposes: it proves that a real person is behind the pseudonym (proof of humanhood), and it allows (without enforcing) the pseuodnym manager to unmask the pseudonym if required (e.g., in legal disputes or fraud investigations). Solutions that do not support such unmasking are considered out of scope.
+    The pseudonym is computed via a PRF. The PRF takes as input the user's pseudonym seed, `pns`, a high entropy secret random value. The PRF additional takes a context, `ctx`, and index, `idx`, as input and computes: `pseudonym = PRF(pns, ctx, idx)`. This construction supports the derivation of structurally distinct pseudonyms under different operational scenarios:
+    
+    1. Directed pseudonyms: The service provider sets the context to the service identifier. To support known-offender matching, the service provider sets the index to a fixed value (e.g., `0`).
+    2. Cross-service pseudonyms: Multiple service providers can share context and index to enable linkability across services.
+    3. Alias-based pseudonyms: The user selects the index to define a consistent alias.
 
-## Proposal
+    Future extensions may include user- or device-supplied inputs to enable features such as device binding or unmaskability.
 
-Following the analysis, [Architecture Decision Record](adr-pseudonyms.md) commits to investigating and prototyping a ZKP-based pseudonym solution within WeBuild. This approach:
-
-- Enables site-specific (and optionally service-specific) pseudonyms without introducing new ecosystem actors.
-- Derives pseudonyms that are unlinkable across sites and services and do not leak any information about the identity subject.
-- Enables rate-limited pseudonyms that enable restricting the number of pseudonyms a person can create per site and/or service.
-- Enables stable pseudonyms that are recoverable even if the user changes their wallet device.
-- Derives pseudonyms that can only be used by the identity subject controlling the proof-of-possession (PoP) key in the attestation.
-- Supports critical use cases like ban enforcement.
-- Provides a foundation for future-proof pseudonym functionality.
-
-There are both technical and regulatory challenges involved. Empirical evaluation and iterative prototyping in WeBuild can provide insights into real-world tradeoffs, demonstrate feasibility, and provide evidence-based guidance for future regulatory frameworks.
-
-The aim of this work is to develop a [Conformance Specification](cs-NN-pseudonyms.md) for WeBuild.
+Based on the use case requirements above, the proposal is developed across two documents. The [Architecture Decision Record](adr-pseudonyms.md) commits to investigating and prototyping a ZKP-based pseudonym solution within WE BUILD, while the [Conformance Specification](cs-NN-pseudonyms.md) defines its implementation details.

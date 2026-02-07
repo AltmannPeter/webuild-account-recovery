@@ -1,6 +1,5 @@
 nav:
   - Pseudonyms for the EUDI Wallet: index.md
-  - Analysis and Alternatives: analysis-alternatives.md
   - Architecture Decision Record: adr-pseudonyms.md
   - Conformance Specification: cs-NN-pseudonyms.md
     
