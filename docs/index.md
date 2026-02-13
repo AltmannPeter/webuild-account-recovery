@@ -20,7 +20,7 @@ As of ARF 2.8.0, identity-bound pseudonyms are explicitly supported, enabling us
 
     Articles 5 and 5b(9) of [Regulation (EU) 2024/1183](https://eur-lex.europa.eu/eli/reg/2024/1183/oj) state that the use of pseudonyms cannot be prohibited unless identification is required by Union or national law. Pseudonym management is a mandatory EUDIW function under Article 5a(4)(b). In addition, [CIR 2024/2979 Article 14](https://eur-lex.europa.eu/eli/reg_impl/2024/2979/oj/eng#art_14) mandates WebAuthn as the pseudonymization solution.
 
-    A recent proposed update to the implementing acts clarifies the mandate for WebAuthn but omits any mention of additional pseudonym types. This creates a potential misalignment between ARF 2.8.0 and the draft legal text.
+    A recent proposed update to the implementing acts clarifies the mandate for WebAuthn but omits any mention of additional pseudonym types. This creates a potential misalignment between ARF 2.8.0 and the draft legal text. Preferably, the legal text should not define pseudonyms based on a specific technology or use-case requirement. Instead, it should define them as identifiers characterized by privacy properties, with each use-case rulebook specifying the applicable requirements.
 
 It remains unclear which pseudonym use cases will be supported in the ARF or the implementing acts. Neither source defines what constitutes a pseudonym, leading to conflicting interpretations based on varying use case requirements.
 
