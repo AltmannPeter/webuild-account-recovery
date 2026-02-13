@@ -40,8 +40,8 @@ How do we address the risks introduced by this change?
 
 - Rely on established ZKP tooling to reduce implementation risk.
 - Offset added complexity by simplifying other aspects and focusing efforts on the ZKP integration. For instance:
-  - Use a simple derivation function like `seed = HMAC(key=secret, msg=personal_number)`
-  - Compute the pseudonym as `SHA256(seed || service_id)`
+    - Use a simple derivation function like `seed = HMAC(key=secret, msg=personal_number)`
+    - Compute the pseudonym as `SHA256(seed || service_id)`
 
 ## Advice
 

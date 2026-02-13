@@ -22,9 +22,11 @@ As of ARF 2.8.0, identity-bound pseudonyms are explicitly supported, enabling us
 
     A recent proposed update to the implementing acts clarifies the mandate for WebAuthn but omits any mention of additional pseudonym types. This creates a potential misalignment between ARF 2.8.0 and the draft legal text.
 
-It remains unclear which pseudonym use cases will be supported in the ARF or the implementing acts. Neither source defines what constitutes a pseudonym, leading to conflicting interpretations based on varying use case requirements. Here, a pseudonym is defined as an attribute representing a specific identity subject. Unlike other attributes that disclose information about the subject, a pseudonym is designed to prevent such disclosure.
+It remains unclear which pseudonym use cases will be supported in the ARF or the implementing acts. Neither source defines what constitutes a pseudonym, leading to conflicting interpretations based on varying use case requirements.
 
-Crucially, a pseudonym is not a single identifier type but a set of identifier types, each configured to meet specific use case needs. As such, pseudonyms must be understood contextually and are meaningful only when configured to align with their intended use case. A practical approach is to begin with use case requirements and then define a corresponding pseudonym configuration.
+Here, a pseudonym is defined as an attribute representing a specific identity subject. Unlike other attributes that disclose information about the subject, a pseudonym is designed to prevent such disclosure.
+
+Crucially, a pseudonym is not a single identifier type. Arguably, it is better to view pseudonyms as part of a *set of identifier types*, each configured to meet specific use case needs. As such, pseudonyms must be understood contextually and are meaningful only when configured to align with their intended use case. A practical approach is to begin with use case requirements and then define a corresponding pseudonym configuration.
 
 ## Toward Identity-bound Pseudonyms
 
