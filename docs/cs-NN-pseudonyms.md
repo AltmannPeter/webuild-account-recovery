@@ -99,12 +99,12 @@ A ZKP-based pseudonym system operates in three main phases, involving the Pseudo
 **Seed issuance**:
 
 1. The Pseudonym Manager generates a unique, high-entropy seed, `pns` for the user
-2. The Pseudonym Manager creates a cryptographic binding to `pns`
-3. The issuer embeds the binding in an attribute attestations, signs, and issues it
+2. The Pseudonym Manager creates a cryptographic commitment to `pns`
+3. The issuer embeds the commitment in an attribute attestations, signs, and issues it
 
 ??? danger "Disclosure of the pseudonym seed"
 
-    It is critical for user privacy that the pseudonym seed is never revealed. The binding in step 2 mitigates accidental disclosure (e.g., if the full attestation is exposed). By including a commitment to the seed rather than embedding the `pns` value directly, the Wallet Unit cannot disclose the seed as the binding is opened within the ZKP circuit during proof generation. This design shifts responsibility to the ZKP layer, which must prove properties over the committed seed without revealing it. It also requires the user's wallet to store the pseudonym seed (out of scope for this text).
+    It is critical for user privacy that the pseudonym seed is never revealed. The commitment in step 2 mitigates accidental disclosure (e.g., if the full attestation is exposed). By including a commitment to the seed rather than embedding the `pns` value directly, the Wallet Unit cannot disclose the seed as the commitment is opened within the ZKP circuit during proof generation. This design shifts responsibility to the ZKP layer, which must prove properties over the committed seed without revealing it. It also requires the user's wallet to store the pseudonym seed (out of scope for this text).
 
 ??? info "The suggested SE approach"
 
@@ -120,7 +120,7 @@ A ZKP-based pseudonym system operates in three main phases, involving the Pseudo
 
 ??? info "ZKP disclosure of pseudonym"
 
-    During presentation, the user would provide a ZKP for a statement such as: "I possess a valid issuer-signed attestation containing a hash binding `H` to a pseudonym seed. I know the preimage `pns` of `H`, and the presented pseudonym `nym` is derived by hashing `pns` concatenated with a scope `scp` and index `idx`.” 
+    During presentation, the user would provide a ZKP for a statement such as: "I possess a valid issuer-signed attestation containing a hash `H` of a pseudonym seed. I know the preimage `pns` of `H`, and the presented pseudonym `nym` is derived by hashing `pns` concatenated with a scope `scp` and index `idx`.” 
 
 **Pseudonym presentation**:
 
