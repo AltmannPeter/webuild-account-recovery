@@ -56,10 +56,10 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 This specification ensures the following security properties and requirements:
 
-- **Soundness**: Users SHALL be able to create and present pseudonyms only when controlling a valid attestation containing a pseudonym seed commitment. Verifiers SHALL be able to verify rate-limits on pseudonym generation.
+- **Soundness**: Users SHALL be able to create and present pseudonyms only when controlling a valid attestation containing a pseudonym seed commitment.
 - **Unforgeability**: It SHALL NOT be possible to create a pseudonym unlinked to a specific attestation holding the user's pseudonym seed.
 - **Unlinkability**: Pseudonyms SHALL appear unrelated to other pseudonyms belonging to the same user across different services.
-- **Rate-limitation**: Verifiers SHALL be able to declare and verify upper limits on site-specific and/or service-specific pseudonyms.
+- **Rate-limitation**: By constructions, the user is limited to one pseudonym per site or service, satisfying the rate limitation requirement.
 - **Secrecy**: The pseudonym seed value SHALL NOT be disclosable. Attestations SHALL store cryptographic commitments to the seed rather than cleartext values.
 - **Transferability**: The pseudonym seed SHALL be recoverable when the previous wallet instance or attestation becomes unavailable.
 
@@ -81,7 +81,7 @@ This specification uses the following roles and components:
     - Retains capability to unmask pseudonyms when legally required
 - **Verifier (Relying Party, Service Provider)**: An entity that:
     - Receives pseudonym presentations with associated ZKP proofs
-    - Verifies pseudonym validity and rate-limiting properties
+    - Verifies pseudonym validity
     - Enforces service-specific policies (e.g., known offender matching during account creation)
     - Provides services (e.g., account recovery) based on verified pseudonyms
 
@@ -115,12 +115,12 @@ A ZKP-based pseudonym system operates in three main phases, involving the Pseudo
 **Pseudonym generation**:
 
 - The user visits a site or service to access with a pseudonym
-- The Wallet Unit derives a pseudonym specific to the site or service using the pseudonym seed (`pns`) a scope (`scp`) and index (`idx`): `nym = PRF(key=pns, data=scp||idx)`
+- The Wallet Unit derives a pseudonym specific to the site or service using the pseudonym seed (`pns`) and the identity of the site or service (`service_id`): `nym = PRF(key=pns, data=service_id)`
 - The Wallet Unit generates a ZKP proving correct derivation
 
 ??? info "ZKP disclosure of pseudonym"
 
-    During presentation, the user would provide a ZKP for a statement such as: "I possess a valid issuer-signed attestation containing a hash binding `H` to a pseudonym seed. I know the preimage `pns` of `H`, and the presented pseudonym `nym` is derived by hashing `pns` concatenated with a scope `scp` and index `idx`.” 
+    During presentation, the user would provide a ZKP for a statement such as: "I possess a valid issuer-signed attestation containing a hash binding `H` to a pseudonym seed. I know the preimage `pns` of `H`, and the presented pseudonym `nym` is derived by hashing `pns` concatenated with your service's identity `service_id`.” 
 
 **Pseudonym presentation**:
 
@@ -131,8 +131,7 @@ TEXT NEEDED ON HOW TO USE OID4VP TO PRESENT A ZKP PSEUDONYM. NO DETAILS HERE AS 
 The verifier:
 
 - Checks that the presented pseudonym is derived from a valid issuer signed attestation
-- Verifies that the correct scope (`scp`) was used
-- Verifies rate-limiting with the index (`idx`) value
+- Verifies that the correct service id (`service_id`) was used
 - Runs the verification circuit to validate the proof and public inputs
 - Accepts or rejects service provisioning based on policy (e.g., known offender list)
 
